@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>BMR Calculator</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20 auto;
+            padding: 20px;
+            max-width: 800px;
+            color: #6bce02;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-image: url("bmr2.jpg");
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            color: black;
+            font-size: 30px;
+            width: 100%;
+            margin-bottom: 10px;
+            font-size: 20px;
+        }
+    select, input, textarea {
+    display: block;
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 8px;
+    border: 1px solid black;
+    box-sizing: border-box;
+    border-radius: 5px;
+    font-size: 20px;
+}
+       input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+            color: rgb(0, 0, 0);
+        }
+
+        input[type="submit"] {
+            background-color: orange ;
+            color: rgb(0, 0, 0, 0.911);
+            padding: 10px 20px;
+            border: none;
+            font-size: larger;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+            color: black;
+        }
+
+        input[type="submit"]:hover {
+            background-color: orangered;
+            color: black
+             
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 5px;
+            color: black;
+            border: 2px solid black;
+        }
+        .result-table {
+            background-color: lightgreen;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .result-table td {
+            padding: 8px;
+            text-align: right;
+            border: 2px;
+        }
+
+        .result-table th {
+            text-align: right;
+            background-color: #d79447;
+            color: black;
+            padding: 8px;
+        }
+        
+        #bmrScore{
+            font-size: 1.5rem;
+            color: green; 
+        }
+        .btn-group {
+            margin-top: 10px;
+            display: flex;
+            justify-content: space-between;
+            background-color: rgb(255, 255, 255);
+            padding: 1px;
+            text-align: right;
+        }
+        .btn {
+            padding: 1rem 2rem;
+            outline: none;
+            border: none;
+            font-size: 1rem;
+            color: var(--red);
+            background-color: black;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .features{
+            width: 50%;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+        }
+        .featurebmr {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: whitesmoke;
+            color: green;
+            border-radius: 15px;
+            height: 60px;
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .featurebmr:hover{
+            background-color: darkgreen;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+<center>
+    <h1 style="color: green;">BMR Calculator</style></h1>
+    <div class="row">
+        <div class="col-6">
+            <form id="bmrForm" action="#"  method="GET">
+                <label for="username"><b>Username</b></label>
+                <input type="varchar"  name="username" required>
+                <br><br>
+                <label for="weight"><b>Weight (kg):</b></label>
+                <input type="number" id="weight" name="weight" required>
+                <br>           
+                <label for="height"><b>Height (cm):</b></label>
+                <input type="number" id="height" name="height" required>
+                <br>
+                <label for="age"><b>Age (years):</b></label>
+                <input type="number" id="age" name="age" required>
+                <br>
+                <label for="gender"><b>Gender:</b></label>
+                <select id="gender" name="gender" required>
+                    <br>
+                    <option value="selectgender">Gender</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                </select><p><br>
+                <label for="activityLevel"><b>Activity Level</b></label>
+                <select id="activityLevel" name="activityLevel" required>
+                    <option value="sedentary"><b></b>Sedentary</b></option>
+                    <option value="lightlyActive"><b>Lightly active</b></option>
+                    <option value="moderatelyActive"><b>Moderately active</b> 
+                    </option>
+                    <option value="veryActive"><b>Very active</b></option>
+                    <option value="extraActive"><b>Extra active</b> 
+                    </option></p>
+                </select>
+                <input type="submit" value="SUBMIT">
+            </form>
+        </div>
+        
+        <div id="bmrScore" name="bmrScore"></div>
+        <div class="col-6">
+            <div id="results" class="result"></div>
+            <div class="btn-group">
+                <button class="btn" id="muscleGainBtn" style="display: none; color: white;">Muscle Gain</button>
+                <button class="btn" id="fatLossBtn" style="display: none; color: white;">Fat Loss</button>
+            </div>
+            <canvas id="macronutrientsChart" width="400" height="200"></canvas>
+        </div>
+    </div>
+    <div class="features">
+        <p><font style="color: black; font-size: 20px;">Tip: Copy the results and paste it in the message box of <font style="color: green;"><b>PT</b></font> AI Bot<br>
+        And get your diet plan!</p></div></font>
+        <a href="main.html"><button type="button" class="featurebmr"><b>Go to Bot</b></button></a>
+    </div>
+
+    <script>
+        function calculateMuscleGainSplit(maintenanceCalories) {
+            var carbPercentage = 0.5; 
+            var proteinPercentage = 0.25; 
+            var fatPercentage = 1 - (carbPercentage + proteinPercentage);
+
+            maintenanceCalories += 500;
+
+            var carbCalories = carbPercentage * maintenanceCalories;
+            var proteinCalories = proteinPercentage * maintenanceCalories;
+            var fatCalories = fatPercentage * maintenanceCalories;
+
+           
+            var carbGrams = carbCalories / 4; 
+            var proteinGrams = proteinCalories / 4; 
+            var fatGrams = fatCalories / 9; 
+
+            return {
+                calories: maintenanceCalories.toFixed(2),
+                carbs: carbGrams.toFixed(2),
+                protein: proteinGrams.toFixed(2),
+                fat: fatGrams.toFixed(2)
+            };
+        }
+
+        
+        function calculateFatLossSplit(maintenanceCalories) {
+            var carbPercentage = 0.45; 
+            var proteinPercentage = 0.25; 
+            var fatPercentage = 1 - (carbPercentage + proteinPercentage);
+
+            maintenanceCalories -= 500;
+
+            var carbCalories = carbPercentage * maintenanceCalories;
+            var proteinCalories = proteinPercentage * maintenanceCalories;
+            var fatCalories = fatPercentage * maintenanceCalories;
+
+            
+            var carbGrams = carbCalories / 4; 
+            var proteinGrams = proteinCalories / 4; 
+            var fatGrams = fatCalories / 9;
+
+            return {
+                calories: maintenanceCalories.toFixed(2),
+                carbs: carbGrams.toFixed(2),
+                protein: proteinGrams.toFixed(2),
+                fat: fatGrams.toFixed(2)
+            };
+        }
+
+        
+        function updateMacronutrientChart(macronutrientSplit) 
+        {
+            var proteinPercentage = (macronutrientSplit.protein / macronutrientSplit.carbs) * 100;
+            var carbPercentage = (macronutrientSplit.carbs / macronutrientSplit.carbs) * 100;
+            var fatPercentage = (macronutrientSplit.fat / macronutrientSplit.carbs) * 100;
+        }
+
+        
+        document.getElementById('bmrForm').addEventListener('submit', function (event) {
+    event.preventDefault(); 
+
+    var weight = parseFloat(document.getElementById('weight').value);
+    var height = parseFloat(document.getElementById('height').value);
+    var age = parseFloat(document.getElementById('age').value);
+    var gender = document.getElementById('gender').value;
+    var bmr;
+    var maintenanceCalories;
+    var activityLevels = {
+        'sedentary': 1.2,
+        'lightlyActive': 1.375,
+        'moderatelyActive': 1.55,
+        'veryActive': 1.725,
+        'extraActive': 1.9
+    };
+
+    if (gender === 'male') {
+        bmr = (10 * weight) + (6.25 * height) - (5 * age) + 5;
+    } else {
+        bmr = (10 * weight) + (6.25 * height) - (5 * age) - 161;
+    }
+
+    maintenanceCalories = bmr * activityLevels[document.getElementById('activityLevel').value];
+
+    
+    document.getElementById('bmrScore').innerHTML = '<strong>BMR Score:</strong> ' + bmr.toFixed(2) + ' calories/day<br>';
+
+    
+    document.getElementById('results').innerHTML = '<strong>Maintenance Calories:</strong> ' + maintenanceCalories.toFixed(2) + ' calories/day<br>';
+
+    
+    updateMacronutrientChart(calculateMuscleGainSplit(maintenanceCalories));
+
+    document.getElementById('muscleGainBtn').style.display = 'block';
+    document.getElementById('fatLossBtn').style.display = 'block';
+});
+
+        document.getElementById('muscleGainBtn').addEventListener('click', function () {
+            var maintenanceCalories = parseFloat(document.getElementById('results').innerText.split(':')[1]);
+            var muscleGainSplit = calculateMuscleGainSplit(maintenanceCalories);
+
+            document.getElementById('results').innerHTML = '<strong>Maintenance Calories:</strong> ' + maintenanceCalories.toFixed(2) + ' calories/day<br>';
+            document.getElementById('results').innerHTML += '<strong>Macronutrient Split for Muscle Gain:</strong><br>';
+            document.getElementById('results').innerHTML += 'Calories: ' + muscleGainSplit.calories + ' calories/day<br>';
+            document.getElementById('results').innerHTML += 'Carbs: ' + muscleGainSplit.carbs + ' grams/day<br>';
+            document.getElementById('results').innerHTML += 'Protein: ' + muscleGainSplit.protein + ' grams/day<br>';
+            document.getElementById('results').innerHTML += 'Fat: ' + muscleGainSplit.fat + ' grams/day<br>';
+
+            updateMacronutrientChart(muscleGainSplit);
+        });
+
+        
+        document.getElementById('fatLossBtn').addEventListener('click', function () {
+            var maintenanceCalories = parseFloat(document.getElementById('results').innerText.split(':')[1]);
+            var fatLossSplit = calculateFatLossSplit(maintenanceCalories);
+
+            document.getElementById('results').innerHTML = '<strong>Maintenance Calories:</strong> ' + maintenanceCalories.toFixed(2) + ' calories/day<br>';
+            document.getElementById('results').innerHTML += '<strong>Macronutrient Split for Fat Loss:</strong><br>';
+            document.getElementById('results').innerHTML += 'Calories: ' + fatLossSplit.calories + ' calories/day<br>';
+            document.getElementById('results').innerHTML += 'Carbs: ' + fatLossSplit.carbs + ' grams/day<br>';
+            document.getElementById('results').innerHTML += 'Protein: ' + fatLossSplit.protein + ' grams/day<br>';
+            document.getElementById('results').innerHTML += 'Fat: ' + fatLossSplit.fat + ' grams/day<br>';
+
+        
+            updateMacronutrientChart(fatLossSplit);
+        });
+    </script>
+</center>
+</body>
+</html>

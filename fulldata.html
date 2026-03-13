@@ -1,0 +1,1295 @@
+main.html      
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PT</title>
+    <style>
+        /* Reset some default styles */
+        body, h1, h2, h3, p {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #1c1c1c; /* Dark Background */
+            color: white; /* White text for contrast */
+            text-align: center;
+            line-height: 1.6;
+            padding: 0;
+            margin: 0;
+            min-height: 100vh;
+        }
+
+        .logo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+            margin-top: 50px;
+            background-color: #0a0a0a; /* Dark logo background */
+            border-radius: 10px;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.7);
+        }
+
+        .logo img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.7);
+        }
+
+        .title h2 {
+            font-size: 50px;
+            color: #3498db; /* Blue text */
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            margin-top: 20px;
+        }
+
+        .title span {
+            font-size: 40px;
+            color: #f1f1f1; /* Light text */
+        }
+
+        .title .highlight {
+            color: #1c9de3; 
+        }
+        .featurebmr {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: darkcyan;
+            color: white;
+            border-radius: 15px;
+            height: 60px;
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .chatbox {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            border: 3px solid #ccc;
+            border-radius: 25px;
+            padding: 5px;
+            background: #fff;
+            margin-top: 30px;
+        }
+        .chatinput {
+            flex: 1;
+            border: none;
+            padding: 10px;
+            font-size: 16px;
+            outline: none;
+            border-radius: 20px;
+        }
+        .send {
+            padding: 10px 15px;
+            margin-left: 5px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #1c9de3;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        .send:hover {
+            background-color: darkcyan;
+        }
+        .send:active {
+            background-color: darkblue;
+        }
+        .chat-container {
+            max-width: 600px;
+            margin: 0 auto;
+            display: flex;
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+            flex-direction: column;
+            padding-bottom: 50px;
+            transform: scale(1.3);
+            transform-origin: top center;
+        }
+        .chat-message {
+            display: flex;
+            margin-bottom: 20px;
+            align-items: flex-start;
+            animation: fadeIn 0.5s ease-out;
+            transform: scale(1.0);
+        }
+        .chat-message.bot {
+            justify-content: flex-start;
+        }
+        .chat-message.user {
+            justify-content: flex-end;
+        }
+        .chat-message p {
+            max-width: 60%;
+            padding: 10px;
+            border-radius: 10px;
+            margin: 0;
+            font-size: 16px;
+        }
+        .chat-message.bot p {
+            background-color: whitesmoke;
+            color: black;
+        }
+        .chat-message.user p {
+            background-color: darkcyan;
+            color: white;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }     
+    </style>
+</head>
+<body>
+    <div class="logo">
+        <img src="/static/AdaptAvenue.png" alt="Logo">
+    </div>
+
+    <div class="title">
+        <h2>
+            <span class="highlight">P</span><span>t</span>
+            <br>
+            <span><i>An AI Bot Specializing in Fitness and Welfare!</i></span>
+        </h2>
+    </div>
+
+    <div class="message">
+        <h1>Welcome, How Can I Help You?</h1>
+    </div>
+    <br> <br>
+    <div class="features">
+        <a href="bmr.html"><button type="button" class="featurebmr"><b>Get BMR Score</b></button></a>
+    </div>
+    <br> 
+
+    <div class="chat-container">
+        <div id="chatBox"></div>
+        <div class="chatbox">
+            <input type="text" id="userMessage" class="chatinput" placeholder="Message">
+            <button class="send" onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+    <script>
+        async function sendMessage() {
+        const userMessage = document.getElementById("userMessage").value.trim();
+        if (userMessage === "") return;
+
+        // Display user's message
+        displayMessage(userMessage, "user");
+
+        try {
+            // Send user message to Rasa API
+            const response = await fetch('http://localhost:5005/webhooks/rest/webhook', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ "sender": "user", "message": userMessage })
+            });
+
+            const data = await response.json();
+
+            // Display bot response
+            if (data && data.length > 0) {
+                data.forEach(messageObj => {
+                    if (messageObj.text) {
+                        displayMessage(messageObj.text, "bot");
+                    }
+                });
+            } else {
+                displayMessage("I didn't quite understand that. Can you rephrase?", "bot");
+            }
+        } catch (error) {
+            console.error("Error communicating with Rasa server:", error);
+            displayMessage("Sorry, I'm having trouble connecting to the server.", "bot");
+        }
+
+        // Clear the input field
+        document.getElementById("userMessage").value = "";
+    }
+
+    function displayMessage(message, sender) {
+        const chatBox = document.getElementById("chatBox");
+
+        // Create message element
+        const messageElement = document.createElement("div");
+        messageElement.classList.add("chat-message", sender);
+
+        // Add message text with proper HTML rendering for bot responses
+        const messageText = document.createElement("p");
+        if (sender === "bot") {
+            messageText.innerHTML = message;  // Allows rendering of HTML in bot messages
+        } else {
+            messageText.textContent = message;  // Prevents HTML injection in user messages
+        }
+        messageElement.appendChild(messageText);
+
+        // Append message to chat
+        chatBox.appendChild(messageElement);
+
+        // Scroll to bottom of chat box
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+    </script>
+</body>
+</html>
+domain.yml    
+version: "3.1"
+
+intents:
+  - greet
+  - goodbye
+  - affirm
+  - deny
+  - mood_great
+  - mood_unhappy
+  - bot_challenge
+  - motivation
+
+responses:
+  utter_greet:
+    - text: "Hey! I am <b>PT🦾</b>! Your personal chatbot to help you in your <b>health and fitness💪🎯</b> related goals. How can I assist you today?"
+    - text: "Hello!👋🏻 Ready to work on your fitness goals?"
+    - text: "Hey there! PT is online now🦾! What can I do for you?"
+
+  utter_cheer_up:
+    - text: "I understand, but we need to stay focused! But if you are tired or feeling down, please rest."
+    - text: "If you need motivation, just tell me."
+
+  utter_happy:
+    - text: "Great, carry on!"
+    - text: "Good for you!"
+
+  utter_goodbye:
+    - text: "Goodbye! Stay healthy and take care."
+    - text: "Bye! Keep working🦾🎯."
+  
+  utter_did_that_help:
+    - text: 😊
+
+  utter_iamabot:
+    - text: "I am a bot 🤖, powered by Rasa."
+    - text: "I am a bot 🤖, created specifically for fitness freaks like you."
+
+  utter_motivation:
+    - text: "<i>The pain you feel today will be the strength you feel tomorrow.</i> — Anonymous<br>
+             Don't stop when you're tired. Stop when you're done. 💪"
+    - text: "<i>Your limitation—it's only your imagination.</i> — Anonymous<br>
+             The only bad workout is the one that didn’t happen. Push yourself!🎯"
+    - text: "<i>Success is the sum of small efforts, repeated day in and day out.</i>— Robert Collier<br>
+             Success starts with self-discipline and determination. Keep going!"  
+
+
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true
+
+  rules.yml     
+  version: "3.1"
+
+  rules:
+  
+  - rule: Say goodbye anytime the user says goodbye
+    steps:
+    - intent: goodbye
+    - action: utter_goodbye
+  
+  - rule: Cheer up anytime the user is unhappy
+    steps:
+    - intent: mood_unhappy
+    - action: utter_cheer_up 
+  
+  - rule: Say 'Good for you' anytime the user is happy
+    steps:
+    - intent: mood_great
+    - action: utter_happy 
+  
+  - rule: Say 'I am a bot' anytime the user challenges
+    steps:
+    - intent: bot_challenge
+    - action: utter_iamabot
+  
+  - rule: Provide motivation when requested
+    steps:
+    - intent: motivation
+    - action: utter_motivation  
+    
+actions.py    
+# This files contains your custom actions which can be used to run
+# custom Python code.
+#
+# See this guide on how to implement these action:
+# https://rasa.com/docs/rasa/custom-actions
+
+
+# This is a simple example for a custom action which utters "Hello World!"
+
+# from typing import Any, Text, Dict, List
+#
+# from rasa_sdk import Action, Tracker
+# from rasa_sdk.executor import CollectingDispatcher
+#
+#
+# class ActionHelloWorld(Action):
+#
+#     def name(self) -> Text:
+#         return "action_hello_world"
+#
+#     def run(self, dispatcher: CollectingDispatcher,
+#             tracker: Tracker,
+#             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+#
+#         dispatcher.utter_message(text="Hello World!")
+#
+#         return []
+
+
+nlu.yml: 
+version: "3.1"
+
+nlu:
+- intent: greet
+  examples: |
+    - hey
+    - hello
+    - hi
+    - hello there
+    - good morning
+    - good evening
+    - moin
+    - hey there
+    - let's go
+    - hey dude
+    - goodmorning
+    - goodevening
+    - good afternoon
+
+- intent: goodbye
+  examples: |
+    - cu
+    - good by
+    - cee you later
+    - good night
+    - bye
+    - goodbye
+    - have a nice day
+    - see you around
+    - bye bye
+    - see you later
+
+- intent: affirm
+  examples: |
+    - yes
+    - y
+    - indeed
+    - of course
+    - that sounds good
+    - correct
+
+- intent: deny
+  examples: |
+    - no
+    - n
+    - never
+    - I don't think so
+    - don't like that
+    - no way
+    - not really
+
+- intent: mood_great
+  examples: |
+    - perfect
+    - great
+    - amazing
+    - feeling like a king
+    - wonderful
+    - I am feeling very good
+    - I am great
+    - I am amazing
+    - I am going to save the world
+    - super stoked
+    - extremely good
+    - so so perfect
+    - so good
+    - so perfect
+
+- intent: mood_unhappy
+  examples: |
+    - my day was horrible
+    - I am sad
+    - I don't feel very well
+    - I am disappointed
+    - super sad
+    - I'm so sad
+    - sad
+    - very sad
+    - unhappy
+    - not good
+    - not very good
+    - extremly sad
+    - so saad
+    - so sad
+
+- intent: bot_challenge
+  examples: |
+    - are you a bot?
+    - are you a human?
+    - am I talking to a bot?
+    - am I talking to a human?
+    
+- intent: motivation
+  examples: |
+    - I need motivation
+    - Motivate me
+    - Give me some motivation
+    - Inspire me
+    - I need a boost
+    - Cheer me up 
+
+    config.yml     
+recipe: default.v1
+
+assistant_id: 20250208-200442-central-commander
+
+language: en
+
+pipeline:
+  - name: WhitespaceTokenizer
+  - name: RegexFeaturizer
+  - name: LexicalSyntacticFeaturizer
+  - name: CountVectorsFeaturizer
+  - name: CountVectorsFeaturizer
+    analyzer: char_wb
+    min_ngram: 1
+    max_ngram: 4
+  - name: DIETClassifier
+    epochs: 100
+    constrain_similarities: true
+  - name: EntitySynonymMapper
+  - name: ResponseSelector
+    epochs: 100
+    constrain_similarities: true
+  - name: FallbackClassifier
+    threshold: 0.7   # Increased from 0.3 to 0.7 (Requires higher confidence)
+    ambiguity_threshold: 0.2
+
+policies:
+  - name: MemoizationPolicy
+  - name: RulePolicy
+  - name: TEDPolicy
+    max_history: 5
+    epochs: 100
+    constrain_similarities: true
+  - name: UnexpecTEDIntentPolicy
+    max_history: 5
+    epochs: 100
+
+
+    Ok how about this can we make manually make data for diet plans without anything like loops, slots. For instance we make diet plan for below 2000 cal in domain.yml and in rules yml or any other yml files, we will forcefully make bot understand that when user enters number below 2000 and above 1500cal, then display that response, for this wecan manually write numbers upto 2000 cal, so it will understand more easily 
+
+
+
+    <script>
+      async function sendMessage() {
+          const userMessage = document.getElementById("userMessage").value.trim();
+          if (userMessage === "") return;
+  
+          // Display user's message
+          displayMessage(userMessage, "user");
+  
+          // Extract BMR value from input
+          const bmrValue = extractBMR(userMessage);
+          if (bmrValue) {
+              const dietPlan = getDietPlan(bmrValue);
+              displayMessage(dietPlan, "bot");
+              return;
+          }
+  
+          try {
+              // Send user message to Rasa API if it's not a BMR number
+              const response = await fetch('http://localhost:5005/webhooks/rest/webhook', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ "sender": "user", "message": userMessage })
+              });
+  
+              const data = await response.json();
+  
+              if (data && data.length > 0) {
+                  data.forEach(messageObj => {
+                      if (messageObj.text) {
+                          displayMessage(messageObj.text, "bot");
+                      }
+                  });
+              } else {
+                  displayMessage("I didn't quite understand that. Can you rephrase?", "bot");
+              }
+          } catch (error) {
+              console.error("Error communicating with Rasa server:", error);
+              displayMessage("Sorry, I'm having trouble connecting to the server.", "bot");
+          }
+  
+          // Clear the input field
+          document.getElementById("userMessage").value = "";
+      }
+  
+      function extractBMR(text) {
+          // Extracts any number from the text (e.g., "My BMR is 1750 cal/day" -> 1750)
+          const match = text.match(/\b\d{3,4}\b/);
+          return match ? parseInt(match[0]) : null;
+      }
+  
+      function getDietPlan(bmr) {
+          if (bmr >= 1500 && bmr <= 2000) {
+              return "Your BMR is between 1500-2000. Diet Plan:\n- Breakfast: Oatmeal & Banana\n- Lunch: Grilled Chicken & Brown Rice\n- Dinner: Stir-fried Veggies & Paneer.";
+          } else if (bmr > 2000 && bmr <= 2500) {
+              return "Your BMR is between 2001-2500. Diet Plan:\n- Breakfast: Eggs & Whole Wheat Toast\n- Lunch: Fish & Quinoa\n- Dinner: Chicken Salad & Sweet Potatoes.";
+          } else {
+              return "Please enter a BMR value between 1500 and 2500 to get a diet plan.";
+          }
+      }
+  
+      function displayMessage(message, sender) {
+          const chatBox = document.getElementById("chatBox");
+  
+          // Create message element
+          const messageElement = document.createElement("div");
+          messageElement.classList.add("chat-message", sender);
+  
+          // Add message text
+          const messageText = document.createElement("p");
+          messageText.textContent = message;
+          messageElement.appendChild(messageText);
+  
+          // Append message to chat
+          chatBox.appendChild(messageElement);
+  
+          // Scroll to bottom
+          chatBox.scrollTop = chatBox.scrollHeight;
+      }
+  </script>
+  
+
+  new js 
+  <script>
+    document.getElementById("userMessage").addEventListener("keypress", function(event) {
+        if (event.key === "Enter") {  
+            event.preventDefault();
+            sendMessage();
+        }
+    });
+
+    async function sendMessage() {
+        const userMessage = document.getElementById("userMessage").value.trim();
+        if (userMessage === "") return;
+
+        displayMessage(userMessage, "user");
+
+        // Extract BMR value from user input
+        const bmrPattern = /(?:BMR is|Your BMR is|Score is)[^\d]*(\d{4}(\.\d{1,2})?)/i;
+        const match = userMessage.match(bmrPattern);
+        
+        if (match) {
+            const bmrValue = parseFloat(match[1]); // Extract numeric BMR value
+            
+            if (bmrValue < 1500) {
+                displayMessage("<b>Too low, give score above 1500</b>", "bot"); // ✅ Updated to support HTML formatting
+                return; 
+            }
+            if (bmrValue > 2500) {
+                displayMessage("<b>Too much, give below 2500</b>", "bot"); // ✅ Updated to support HTML formatting
+                return; 
+            }
+            
+            let dietPlan = getDietPlan(bmrValue);
+            displayMessage(dietPlan, "bot");
+            return; 
+        }
+
+        try {
+            // Send user message to Rasa API
+            const response = await fetch('http://localhost:5005/webhooks/rest/webhook', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ "sender": "user", "message": userMessage })
+            });
+
+            const data = await response.json();
+
+            if (data && data.length > 0) {
+                data.forEach(messageObj => {
+                    if (messageObj.text) {
+                        displayMessage(messageObj.text, "bot");
+                    }
+                });
+            } else {
+                displayMessage("I didn't quite understand that. Can you rephrase?", "bot");
+            }
+        } catch (error) {
+            console.error("Error communicating with Rasa server:", error);
+            displayMessage("Sorry, I'm having trouble connecting to the server.", "bot");
+        }
+
+        document.getElementById("userMessage").value = "";
+    }
+
+    function getDietPlan(bmr) {
+        if (bmr >= 1500 && bmr <= 1700) {
+            return "<b>Based on your BMR, a diet plan of 1500-1700 calories is recommended:</b> 🥗 Oats, Chicken, Vegetables, and Nuts.";
+        } else if (bmr >= 1701 && bmr <= 1900) {
+            return "<b>Your recommended diet plan (1701-1900 calories):</b> 🍗 Lean meats, Whole grains, and Fruits.";
+        } else if (bmr >= 1901 && bmr <= 2100) {
+            return "<b>For BMR 1901-2100 calories:</b> 🥩 Protein-rich foods, Quinoa, and Healthy fats.";
+        } else if (bmr >= 2101 && bmr <= 2300) {
+            return "<b>Diet plan for BMR 2101-2300 calories:</b> 🍚 Rice, Fish, Avocados, and Beans.";
+        } else if (bmr >= 2301 && bmr <= 2500) {
+            return "<b>Suggested diet for BMR 2301-2500 calories:</b> 🍕 Balanced carbs, Proteins, and Fiber-rich foods.";
+        }
+        return "<b>Your BMR is outside the normal range for this diet plan.</b>";
+    }
+
+    function displayMessage(message, sender) {
+        const chatBox = document.getElementById("chatBox");
+
+        const messageElement = document.createElement("div");
+        messageElement.classList.add("chat-message", sender);
+
+        const messageText = document.createElement("p");
+        
+        // ✅ **(Updated) Allows rendering of HTML in bot messages**
+        if (sender === "bot") {
+            messageText.innerHTML = message;  // ✅ **Edited: Now correctly renders HTML**
+        } else {
+            messageText.textContent = message;
+        }
+
+        messageElement.appendChild(messageText);
+        chatBox.appendChild(messageElement);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+</script>    
+
+newnwnwnjes
+<script> 
+    document.getElementById("userMessage").addEventListener("keypress", function(event) {
+        if (event.key === "Enter") {  
+            event.preventDefault();
+            sendMessage();
+        }
+    });
+
+    async function sendMessage() {
+        const userMessage = document.getElementById("userMessage").value.trim();
+        if (userMessage === "") return;
+
+        displayMessage(userMessage, "user");
+
+        // Extract Maintenance Calories value from user input
+        const maintenancePattern = /Maintenance Calories:\s*(\d+\.?\d*)\s*calories\/day/i;
+        const match = userMessage.match(maintenancePattern);
+        
+        if (match) {
+            const maintenanceCalories = parseFloat(match[1]);
+            
+            if (maintenanceCalories < 1500) {
+                displayMessage("Too low, maintenance calories must be above 1500", "bot");
+                return;
+            }
+            if (maintenanceCalories > 2500) {
+                displayMessage("Too much, maintenance calories must be below 2500", "bot");
+                return;
+            }
+            
+            let dietPlan = getDietPlan(maintenanceCalories);
+            displayMessage(dietPlan, "bot");
+            return; 
+        }
+
+        try {
+            // Send user message to Rasa API
+            const response = await fetch('http://localhost:5005/webhooks/rest/webhook', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ "sender": "user", "message": userMessage })
+            });
+
+            const data = await response.json();
+
+            if (data && data.length > 0) {
+                data.forEach(messageObj => {
+                    if (messageObj.text) {
+                        displayMessage(messageObj.text, "bot");
+                    }
+                });
+            } else {
+                displayMessage("I didn't quite understand that. Can you rephrase?", "bot");
+            }
+        } catch (error) {
+            console.error("Error communicating with Rasa server:", error);
+            displayMessage("Sorry, I'm having trouble connecting to the server.", "bot");
+        }
+
+        document.getElementById("userMessage").value = "";
+    }
+
+    function getDietPlan(calories) {
+        if (calories >= 1500 && calories <= 1750) {
+            return "For 1500-1750 cal/day: 🥗 Healthy salads, Lean protein, and Whole grains.";
+        } else if (calories >= 1751 && calories <= 2000) {
+            return "For 1751-2000 cal/day: 🍛 Balanced meals with Vegetables, Protein, and Good fats.";
+        } else if (calories >= 2001 && calories <= 2250) {
+            return "For 2001-2250 cal/day: 🍗 High-protein diet with Whole carbs and Healthy oils.";
+        } else if (calories >= 2251 && calories <= 2500) {
+            return "For 2251-2500 cal/day: 🍕 Energy-dense foods with a mix of Carbs, Protein, and Fats.";
+        }
+        return "Your Maintenance Calories are outside the recommended range.";
+    }
+
+    function displayMessage(message, sender) {
+        const chatBox = document.getElementById("chatBox");
+
+        const messageElement = document.createElement("div");
+        messageElement.classList.add("chat-message", sender);
+
+        const messageText = document.createElement("p");
+        messageText.textContent = message;
+        messageElement.appendChild(messageText);
+
+        chatBox.appendChild(messageElement);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+</script>    
+</body>
+
+{{finalmain
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>PT</title>
+        <style>
+            /* Reset some default styles */
+            body, h1, h2, h3, p {
+                margin: 0;
+                padding: 0;
+            }
+    
+            body {
+                font-family: 'Arial', sans-serif;
+                background-color: #1c1c1c; /* Dark Background */
+                color: white; /* White text for contrast */
+                text-align: center;
+                line-height: 1.6;
+                padding: 0;
+                margin: 0;
+                min-height: 100vh;
+            }
+    
+            .logo {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 200px;
+                margin-top: 50px;
+                background-color: #0a0a0a; /* Dark logo background */
+                border-radius: 10px;
+                box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.7);
+            }
+    
+            .logo img {
+                width: 150px;
+                height: 150px;
+                border-radius: 50%;
+                box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.7);
+            }
+    
+            .title h2 {
+                font-size: 50px;
+                color: #3498db; /* Blue text */
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+                margin-top: 20px;
+            }
+    
+            .title span {
+                font-size: 40px;
+                color: #f1f1f1; /* Light text */
+            }
+    
+            .title .highlight {
+                color: #1c9de3; 
+            }
+            .featurebmr {
+                display: inline-block;
+                padding: 10px 20px;
+                background-color: darkcyan;
+                color: white;
+                border-radius: 15px;
+                height: 60px;
+                text-align: center;
+                font-size: 20px;
+                font-weight: bold;
+                cursor: pointer;
+            }
+            .chatbox {
+                display: flex;
+                align-items: center;
+                width: 100%;
+                max-width: 600px;
+                margin: 0 auto;
+                border: 3px solid #ccc;
+                border-radius: 25px;
+                padding: 5px;
+                background: #fff;
+                margin-top: 30px;
+            }
+            .chatinput {
+                flex: 1;
+                border: none;
+                padding: 10px;
+                font-size: 16px;
+                outline: none;
+                border-radius: 20px;
+            }
+            .send {
+                padding: 10px 15px;
+                margin-left: 5px;
+                font-size: 16px;
+                color: #fff;
+                background-color: #1c9de3;
+                border: none;
+                border-radius: 20px;
+                cursor: pointer;
+                transition: background 0.3s ease;
+            }
+            .send:hover {
+                background-color: darkcyan;
+            }
+            .send:active {
+                background-color: darkblue;
+            }
+            .chat-container {
+                max-width: 600px;
+                margin: 0 auto;
+                display: flex;
+                font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+                flex-direction: column;
+                padding-bottom: 50px;
+                transform: scale(1.3);
+                transform-origin: top center;
+            }
+            .chat-message {
+                display: flex;
+                margin-bottom: 20px;
+                align-items: flex-start;
+                animation: fadeIn 0.5s ease-out;
+                transform: scale(1.0);
+            }
+            .chat-message.bot {
+                justify-content: flex-start;
+            }
+            .chat-message.user {
+                justify-content: flex-end;
+            }
+            .chat-message p {
+                max-width: 60%;
+                padding: 10px;
+                border-radius: 10px;
+                margin: 0;
+                font-size: 16px;
+            }
+            .chat-message.bot p {
+                background-color: whitesmoke;
+                color: black;
+            }
+            .chat-message.user p {
+                background-color: darkcyan;
+                color: white;
+            }
+            @keyframes fadeIn {
+                from {
+                    opacity: 0;
+                }
+                to {
+                    opacity: 1;
+                }
+            }     
+        </style>
+    </head>
+    <body>
+        <div class="logo">
+            <img src="/static/AdaptAvenue.png" alt="Logo">
+        </div>
+    
+        <div class="title">
+            <h2>
+                <span class="highlight">P</span><span>t</span>
+                <br>
+                <span><i>An AI Bot Specializing in Fitness and Welfare!</i></span>
+            </h2>
+        </div>
+    
+        <div class="message">
+            <h1>Welcome, How Can I Help You?</h1>
+        </div>
+        <br> <br>
+        <div class="features">
+            <a href="bmr.html"><button type="button" class="featurebmr"><b>Get BMR Score</b></button></a>
+        </div>
+        <br> 
+    
+        <div class="chat-container">
+            <div id="chatBox"></div>
+            <div class="chatbox">
+                <input type="text" id="userMessage" class="chatinput" placeholder="Message">
+                <button class="send" onclick="sendMessage()">Send</button>
+            </div>
+        </div>
+        <script> 
+            document.getElementById("userMessage").addEventListener("keypress", function(event) {
+                if (event.key === "Enter") {  
+                    event.preventDefault();
+                    sendMessage();
+                }
+            });
+        
+            async function sendMessage() {
+                const userMessageInput = document.getElementById("userMessage");
+                const userMessage = userMessageInput.value.trim();
+                if (userMessage === "") return;
+        
+                displayMessage(userMessage, "user");
+        
+                // Extract Maintenance Calories value and Goal (Muscle Gain / Fat Loss)
+                const maintenancePattern = /Maintenance Calories:\s*(\d+\.?\d*)\s*calories\/day/i;
+                const goalPattern = /(Muscle Gain|Fat Loss)/i;
+                const maintenanceMatch = userMessage.match(maintenancePattern);
+                const goalMatch = userMessage.match(goalPattern);
+                
+                if (maintenanceMatch && goalMatch) {
+                    const maintenanceCalories = parseFloat(maintenanceMatch[1]);
+                    const goal = goalMatch[1].toLowerCase(); // Convert to lowercase for consistency
+        
+                    if (maintenanceCalories < 1500) {
+                        displayMessage("Too low, maintenance calories must be above 1500", "bot");
+                    } else if (maintenanceCalories > 2500) {
+                        displayMessage("Too much, maintenance calories must be below 2500", "bot");
+                    } else {
+                        let dietPlan = getDietPlan(maintenanceCalories, goal);
+                        displayMessage(dietPlan, "bot");
+                    }
+        
+                    // Clear input field after processing Maintenance Calories
+                    userMessageInput.value = "";
+                    return;
+                }
+        
+                try {
+                    // Send user message to Rasa API
+                    const response = await fetch('http://localhost:5005/webhooks/rest/webhook', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ "sender": "user", "message": userMessage })
+                    });
+        
+                    const data = await response.json();
+        
+                    if (data && data.length > 0) {
+                        data.forEach(messageObj => {
+                            if (messageObj.text) {
+                                displayMessage(messageObj.text, "bot");
+                            }
+                        });
+                    } else {
+                        displayMessage("I didn't quite understand that. Can you rephrase?", "bot");
+                    }
+                } catch (error) {
+                    console.error("Error communicating with Rasa server:", error);
+                    displayMessage("Sorry, I'm having trouble connecting to the server.", "bot");
+                }
+        
+                // Clear input field for all responses
+                userMessageInput.value = "";
+            }
+        
+            function getDietPlan(calories, goal) {
+                if (goal === "muscle gain") {
+                    if (calories >= 1500 && calories <= 1750) {
+                        return "Muscle Gain (1500-1750 cal/day): 🥩 High-protein meals, Brown rice, and Healthy fats.";
+                    } else if (calories >= 1751 && calories <= 2000) {
+                        return "Muscle Gain (1751-2000 cal/day): 🍗 Lean meats, Whole grains, and Nuts.";
+                    } else if (calories >= 2001 && calories <= 2250) {
+                        return "Muscle Gain (2001-2250 cal/day): 🥚 Eggs, Protein shakes, and Avocados.";
+                    } else if (calories >= 2251 && calories <= 2500) {
+                        return "Muscle Gain (2251-2500 cal/day): 🍕 Balanced high-calorie meals, Carbs, and Protein mix.";
+                    }
+                } else if (goal === "fat loss") {
+                    if (calories >= 1500 && calories <= 1750) {
+                        return "Fat Loss (1500-1750 cal/day): 🥗 Lean proteins, Low-carb veggies, and Healthy fats.";
+                    } else if (calories >= 1751 && calories <= 2000) {
+                        return "Fat Loss (1751-2000 cal/day): 🍛 Moderate carbs, Chicken, and Green vegetables.";
+                    } else if (calories >= 2001 && calories <= 2250) {
+                        return "Fat Loss (2001-2250 cal/day): 🥑 Healthy fats, Nuts, and Lean proteins.";
+                    } else if (calories >= 2251 && calories <= 2500) {
+                        return "Fat Loss (2251-2500 cal/day): 🍣 Balanced diet with controlled portions and Fiber-rich foods.";
+                    }
+                }
+                return "Your Maintenance Calories or goal selection is outside the recommended range.";
+            }
+        
+            function displayMessage(message, sender) {
+                const chatBox = document.getElementById("chatBox");
+        
+                const messageElement = document.createElement("div");
+                messageElement.classList.add("chat-message", sender);
+        
+                const messageText = document.createElement("p");
+                messageText.textContent = message;
+                messageElement.appendChild(messageText);
+        
+                chatBox.appendChild(messageElement);
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }
+        </script>     
+    </body>
+    </html>
+    }}
+
+    [[[register and signin
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register- PT</title>
+    <style>
+    body {
+        background-image: url(registerback.jpg);
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-attachment: fixed;
+        background-position: center;
+        margin: 0%;
+        padding: 0%;
+        font-size: 24px;
+        font-family: "Falling Sky";
+    }
+     
+     h1 { font-family: Arial;
+        text-indent: 50%; 
+        font-size:xx-large;
+        font-weight: bolder;
+    } 
+      div { 
+        background-color: transparent;
+        width: 500px;
+        color: white;
+        padding: 50px;
+        margin: 50px;
+        text-indent: 10px;
+        font-size:large;
+        font-weight:bold; 
+    }
+    div img{
+        width: 20%;
+        height: 20%;
+    }
+    div input{
+        border-width: 4px;
+        border-color: darkblue;
+        padding: 5px;
+        border-radius: 20px;
+    }
+      .button1 {
+        background-color: whitesmoke;
+        border-color:black;
+        border-width: thick;
+        border-radius: 20px;
+        padding: 16px 32px;
+        text-align: center;
+        font-size:medium;
+        display:inline-block;
+        margin: 4px 2px;
+        transition-duration: 0.4s;
+        cursor: pointer;
+        font-family: "Falling Sky";
+        font-size: 20px;
+    }
+
+    .button1:hover{
+        background-color: blue;
+        color: white;
+    }
+     .logo img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.7);
+        }
+        a{
+            color: rgb(13, 185, 242);
+            text-decoration: none;
+        }
+</style>    
+</head>
+<body>
+    <center>
+        <br><br>
+    <div>
+       <img src="newlogo.png" alt="Logo">
+        <h2 font style="color: white; font-size: 38px; font-family: Falling Sky;"><b>REGISTER</b></font></h2>
+    <form action="register.html" method="post">
+        <label for="username">Username: </label> 
+        <input type="text" name="username" required><br><br>
+        <label for="password">Password: </label> 
+        <input type="password" name="password" required><br><br>
+        <br><br><br>
+        <button type="submit" class="button1"><b>Register</b></button>
+        <br><br>
+       <p>Already have an account,<a href="signin.html"> <b>Sign In Now</b></a>
+    </form>
+</body>
+</html>
+signin
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sign In - PT</title>
+    <style>
+        body {
+            background-image: url(back.jpg);
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            margin: 0;
+            padding: 0;
+            font-size: 24px;
+            font-family: "Falling Sky";
+        }
+
+        h1 {
+            font-family: Arial;
+            text-indent: 50%; 
+            font-size: xx-large;
+            font-weight: bolder;
+        }
+
+        div { 
+            background-color: transparent;
+            width: 500px;
+            color: black;
+            padding: 50px;
+            margin: 50px;
+            border-radius: 20px;
+            text-indent: 10px;
+            font-size: large;
+            font-weight: bold; 
+        }
+
+        div img {
+            width: 20%;
+            height: 20%;
+        }
+
+        div input {
+            border-width: 4px;
+            border-color: darkblue;
+            padding: 5px;
+            border-radius: 20px;
+        }
+
+        .button1 {
+            background-color: whitesmoke;
+            border-color: black;
+            border-width: thick;
+            border-radius: 20px;
+            padding: 16px 32px;
+            text-align: center;
+            font-size: medium;
+            display: inline-block;
+            margin: 4px 2px;
+            transition-duration: 0.4s;
+            cursor: pointer;
+            font-family: "Times New Roman";
+            font-size: 20px;
+        }
+
+        .button1:hover {
+            background-color: blue;
+            color: white;
+        }
+
+        .logo img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.7);
+        }
+
+        a {
+            color: rgb(13, 185, 242);
+            text-decoration: none;
+        }
+    </style>    
+</head>
+<body>
+    <center>
+        <div>
+            <img src="newlogo.png" alt="Logo">
+            <h2 style="color: black; font-size: 38px;"><b>SIGN IN</b></h2>
+            
+            <form id="signinForm">
+                <h2>Please Enter Your Details Again!</h2><br>
+                <label for="username">Username:</label>
+                <input type="text" name="username" required><br><br>
+
+                <label for="password">Password:</label>
+                <input type="password" name="password" required><br><br><br>
+
+                <button type="submit" class="button1">Sign In</button>
+                <br><br>
+
+                <p>Don't have an account? <a href="register.html"><b>Register Now</b></a></p>
+            </form>
+        </div>
+    </center>
+
+    <script>
+        document.querySelector("#signinForm").addEventListener("submit", function(event) {
+            event.preventDefault(); // Prevent normal form submission
+
+            const formData = {
+                username: document.querySelector("input[name='username']").value,
+                password: document.querySelector("input[name='password']").value
+            };
+
+            fetch("/signin", { 
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                if (data.message === "Login successful!") {
+                    window.location.href = "main.html"; // Redirect to main.html
+                }
+            })
+            .catch(error => console.error("Error:", error));
+        });
+    </script>        
+</body>
+</html>
+]]]

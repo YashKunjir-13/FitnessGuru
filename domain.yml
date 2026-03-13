@@ -1,0 +1,417 @@
+version: "3.1"
+
+intents:
+  - greet
+  - goodbye
+  - affirm
+  - deny
+  - mood_great
+  - mood_unhappy
+  - bot_challenge
+  - quotes
+  - info
+  - egg_cal
+  - burger_cal
+  - pizza_cal
+  - pasta_cal
+  - chicken_cal
+  - mutton_cal
+  - fish_cal
+  - dal_cal
+  - paneer_cal
+  - avocado
+  - beanscal
+  - soyachunkscal
+  - applescal
+  - bananacal
+  - kiwiscal
+  - darkchocolatecal
+  - milkcal
+  - oatscal
+  - dryfruitscal
+  - tofu
+  - peanuts
+  - chole
+  - biryani
+  - mango
+  - spinach
+  - coffee
+  - tea
+  - homework
+  - gymwork
+  - yoga
+  - healthtips
+  - thirtydays
+  - walk
+  - sleep
+  - weightlossstrategies
+  - weightgainstrategies
+  - hydrate
+  - foodcal
+  - thanks
+  - misseditems
+  - nlu_fallback
+
+responses:
+
+  utter_default:
+    - text: "Sorry, I didn't understand that. Can you please rephrase?"
+    - text: "I'm not sure what you mean. Try asking something related to health or fitness. or type 'information'"
+    - text: "Oops! That doesn't seem to be in my knowledge base. Can I help with something else?"
+  
+  utter_greet:
+    - text: "Hey! I am <b>PT🦾</b>! Your personal chatbot to help you in your <b>health and fitness💪🎯</b> related goals. How can I assist you today?"
+    - text: "Hello!👋🏻 Ready to work on your fitness goals?"
+    - text: "Hey there! PT is online now🦾! What can I do for you?"
+
+  utter_cheer_up:
+    - text: "I understand, but we need to stay focused! But if you are tired or feeling down, please rest."
+    - text: "If you need motivation, just tell me."
+
+  utter_happy:
+    - text: "Great, carry on!"
+    - text: "Good for you!"
+
+  utter_goodbye:
+    - text: "Goodbye! Stay healthy and take care."
+    - text: "Bye! Keep working🦾🎯."
+
+  utter_thanks:
+    - text: "Your welcome!😀"
+    - text: "Your welcome, keep hustling!🦾🎯."  
+  
+  utter_iamabot:
+    - text: "I am a bot 🤖, powered by Rasa."
+    - text: "I am a bot 🤖, created specifically for fitness freaks like you."
+
+  utter_quotes:
+    - text: "<i>The pain you feel today will be the strength you feel tomorrow.</i> — Anonymous<br>
+             Don't stop when you're tired. Stop when you're done.💪"
+    - text: "<i>Your limitation—it's only your imagination.</i> — Anonymous<br>
+             The only bad workout is the one that didn’t happen. Push yourself!🎯"
+    - text: "<i>Success is the sum of small efforts, repeated day in and day out.</i>— Robert Collier<br>
+             Success starts with self-discipline and determination. Keep going!"  
+
+  utter_info:
+    - text: "👉🏻 I am <b>PT</b>, a chatbot created using Rasa🤖. I am specifically designed to assist you on your <b>health and fitness</b> needs!<br>
+             👉🏻 I can generate a <b>diet plan</b>📝 based on your BMR score(Go to my BMR Score feature and get your score now!).<br>
+             👉🏻 You can track your calorie consumption for the day using my another feature: <b>PTracker</b>(Go to Tracker).<br>
+             👉🏻 I can give you <b>calories</b> of certain food items like 🥚,🍗,🍔 and many more! Just type '<b>Food</b>'</br>
+             👉🏻 I can provide you with various health and nutrition tips(The ones you haven't heard of😀(Type 'tips')<br>
+             👉🏻 Type '<b>home workout</b>' to get a list of fundamental exercises that promote overall fitness(just essential exercises for a strong and healthy body!💪)<br>
+             👉🏻 Type '<b>gym workout</b>' to get a list of essential exercises that build overall strength🏋️‍♂️<br>
+             👉🏻 Type '<b>yoga</b>' to get a list of fundamental yoga poses that enhance flexibility and balance(only includes must-do asanas for a healthier you!)🧘‍♂️<br>
+             👉🏻 I can <b>motivate</b> you, if you are feeling low💪🏻<br>(Just type 'Motivate me!')"           
+  utter_foodcal:
+    - text: "I can provide calories and information of these many food items: eggs, chicken, mutton, fish, burgers, pizzas, soyachunks
+            paneer, chole, peanuts pasta, tofu, dal, beans, spinach, dark chocolate, avocados, mango, milk, apples, kiwi,
+            bananas, coffee and tea<br> Just type 'eggs', 'bananas', and you will get the information.<br>
+            (I am still in developing stage, so if you search any other unique food item out of these, I will most likely not understand your question🥲)"   
+
+  utter_eggcal:
+    - text: "<i>Eggs</i> are a powerhouse of nutrition! 🥚 A single large egg contains around <b>70</b>calories, packed with high-quality protein and essential nutrients. <br> 
+             Whether boiled, scrambled, or poached, eggs are a great addition to a balanced diet!"
+    - text: "One egg has approximately <b>70 calories</b>.🥚"
+
+  utter_burgercal:
+    - text: "🍔 A standard <i>burger</i> contains approximately 250-300 calories.<br>
+            (A burger's calories can vary widely based on toppings and size. Adding cheese, bacon, and sauces can increase the calorie count significantly! Keep it balanced! ⚖️)"
+    - text: "🍔 Regular Burger: ~250-300 kcal<br>🧀 Cheeseburger: ~300-350 kcal<br>
+            🥓 Bacon Burger: ~400-500 kcal<br>🍔🍔 Double Patty Burger: ~500-700 kcal
+            <br>🌱 Veggie Burger: ~200-350 kcal (varies by ingredients)"
+    - text: "A classic burger(~300 kcal) provides, Protein: ~15g, Carbs: ~30g, Fats: ~12g, Sodium: ~500mg"          
+
+  utter_pizzacal:  
+    - text: "🍕 A regular slice of <b>pizza</b> contains approximately <b>250-300 calories</b>.<br>
+           <b>Calories in different types of pizza (per slice):</b><br>  
+           <b>Cheese Pizza:</b> <i>~250-300 kcal</i><br>  
+           <b>Pepperoni Pizza:</b> <i>~300-350 kcal</i><br>  
+           <b>Veggie Pizza:</b> <i>~200-280 kcal</i><br>  
+           <b>Deep Dish Pizza:</b> <i>~350-450 kcal</i><br>  
+           <b>Thin Crust Pizza:</b> <i>~200-250 kcal</i><br>"  
+    - text: "🍕 A single slice of <b>pizza</b> (<i>300 kcal</i>) provides <b>12g protein, 35g carbs, and 10g fat</b>. The toppings and crust can significantly change the calorie count!"   
+    - text: "🍕 Love <b>Pizza</b>? Just remember—while one slice is <i>~300 kcal</i>, an entire medium pizza can pack <b>1500+ calories</b>! <i>Moderation is key! 😉</i>"             
+
+  utter_pastacal:
+    - text: "🍝 A standard serving of <i>plain pasta</i> (~100g cooked) contains approximately <b>150-200 calories</b>.<br>
+            (Calories vary based on the type of pasta, sauce, and added ingredients! Adding creamy sauces and cheese can increase the calorie count significantly. Balance is key! ⚖️)"
+    - text: "🍝 <b>Calories in different types of pasta (per 100g cooked):</b><br>
+            🍝 <b>Plain Pasta:</b> <i>~150-200 kcal</i><br>
+            🍝 <b>Whole Wheat Pasta:</b> <i>~120-180 kcal</i><br>
+            🍝 <b>Spaghetti with Marinara:</b> <i>~180-250 kcal</i><br>
+            🧀 <b>Alfredo Pasta:</b> <i>~300-400 kcal</i><br>
+            🍝 <b>Mac and Cheese:</b> <i>~350-450 kcal</i><br>"
+    - text: "🍝 A serving of <b>plain pasta</b> (~200 kcal) provides:<br>
+            <b>Carbs:</b> ~40g<br>
+            <b>Protein:</b> ~6g<br>
+            <b>Fats:</b> ~1g<br>
+            <b>Fiber:</b> ~2g<br>
+            🍝 Adding lean protein like chicken or veggies can make it a more balanced meal!"
+    - text: "🍝 <i>100g plain pasta</i> is ~200 kcal, a full plate with creamy sauces can hit <b>600-1000 calories</b>! Choose wisely! 😉"    
+  
+  utter_chickencal:
+    - text: "🍗 <i>Chicken</i> is a great source of lean protein! A 100g serving of <b>skinless chicken breast</b> contains approximately <b>165 calories</b>.<br>
+            (Calories vary depending on the cut and preparation—fried and sauced versions add extra calories! 🍽️)"
+    - text: "🍗 <b>Calories in different chicken cuts (per 100g, cooked):</b><br>
+             🍗 <b>Chicken Breast (skinless):</b> <i>~165 kcal</i><br>
+             🍗 <b>Chicken Thigh:</b> <i>~210 kcal</i><br>
+             🍗 <b>Chicken Drumstick:</b> <i>~190 kcal</i><br>
+             🍗 <b>Chicken Wings:</b> <i>~250 kcal</i><br>
+             🍗🔥 <b>Fried Chicken:</b> <i>~300-400 kcal</i> (depends on batter & oil!)"
+    - text: "🍗 A 100g serving of <b>chicken breast</b> (~165 kcal) provides:<br>
+             <b>Protein:</b> ~31g<br>
+             <b>Fats:</b> ~3.6g<br>
+             <b>Carbs:</b> 0g (great for low-carb diets!)<br>
+             <b>Iron & Zinc:</b> Essential for immunity & energy!"
+
+  utter_muttoncal:
+    - text: "<i>Mutton (Goat Meat)</i> is rich in protein and healthy fats! A 100g serving of <b>cooked mutton</b> contains approximately <b>250-300 calories</b>.<br>
+            (The calorie content varies depending on the cut and cooking method—grilled and lean cuts are healthier! 🔥)"
+    - text: "<b>Calories in different mutton cuts (per 100g, cooked):</b><br>
+             <b>Lean Mutton:</b> <i>~250 kcal</i><br>
+             <b>Mutton with Fat:</b> <i>~300-350 kcal</i><br>
+            <b>Fried Mutton:</b> <i>~350-450 kcal</i> (depends on oil & spices!)"
+    - text: " A 100g serving of <b>mutton (~250 kcal)</b> provides:<br>
+             <b>Protein:</b> ~25g<br>
+             <b>Fats:</b> ~20g (higher in fatty cuts)<br>
+             <b>Iron & Zinc:</b> Essential for blood health & immunity<br>
+             <b>Cholesterol:</b> Moderate levels—consume in balance! ⚖️"
+    - text: "<b>Mutton is a nutrient powerhouse!</b> While it's high in protein (~250 kcal/100g), fatty cuts and curries can push it beyond <b>400 kcal</b>! Choose lean cuts for a healthier meal! 🍽️"          
+
+  utter_fishcal:
+    - text: "🐟 <i>Fish</i> is a protein-rich food with varying calories based on type & preparation!<br>
+             🎣 <b>Grilled Fish (100g):</b> ~120-180 kcal<br>
+             🍛 <b>Fish Curry:</b> ~200-300 kcal (varies with oil & spices!)<br>
+             🍤 <b>Fried Fish:</b> ~250-400 kcal (depends on batter & frying method!)"
+    - text: "🐟 A 100g serving of <b>fish (~150 kcal)</b> provides:<br>
+             <b>Protein:</b> ~20-25g<br>
+             <b>Omega-3 Fats:</b> Great for heart & brain health! 🧠💖<br>
+             <b>Best Choices:</b> Salmon, Rohu, Pomfret, Surmai (King Fish)!"
+
+  utter_dalcal:
+    - text: "🥣 <i>Dal (Lentils)</i> is a staple in Indian meals! A 1-cup serving of <b>cooked dal</b> contains ~180-250 kcal.<br>
+            (Different dals have slightly different calories—Toor, Moong, Masoor, and Chana all pack protein & fiber! 🌱)"
+  
+  utter_paneercal:
+    - text: "🧀 <i>Paneer</i> (Indian Cottage Cheese) is protein-packed!<br>
+             <b>100g Paneer:</b> ~250-300 kcal<br>
+             🍛 <b>Paneer Butter Masala:</b> ~400-600 kcal (heavy on cream & butter!)<br>
+             🌶️ <b>Paneer Tikka:</b> ~250-350 kcal (grilled goodness!🔥)"
+  
+  utter_avocadocal:
+    - text: "🥑 <i>Avocado</i> is a healthy fat bomb! One medium avocado (~200g) contains ~300-350 kcal.<br>
+            (Rich in fiber & heart-healthy fats—perfect for smoothies & toasts! 🍞🥑)"
+  
+  utter_beanscal:
+    - text: "🌱 <i>Beans</i> are an excellent plant protein source!<br>
+             <b>100g Cooked Beans:</b> ~130-150 kcal<br>
+             <b>Rajma (Kidney Beans):</b> ~150 kcal per 100g<br>
+             <b>Black Beans:</b> ~130 kcal per 100g"
+  
+  utter_soyachunkscal:
+    - text: "🥗 <i>Soya Chunks</i> (Veg Protein Powerhouse!)<br>
+             <b>100g Soya Chunks:</b> ~330-350 kcal<br>
+             <b>Protein:</b> ~52g (higher than chicken! 🏋️‍♂️)"
+  
+  utter_applescal:
+    - text: "🍎 <i>Apple</i> (~100g): ~50-60 kcal<br>
+            (A light & fiber-rich snack for anytime!)"
+  
+  utter_bananacal:
+    - text: "🍌 <i>Banana</i> (~120g per medium banana): ~100-120 kcal<br>
+            (Great pre-workout energy booster! ⚡)"
+  
+  utter_kiwiscal:
+    - text: "🥝 <i>Kiwi</i> (~100g): ~60 kcal<br>
+            (Loaded with Vitamin C & antioxidants! 🍊)"
+  
+  utter_darkchocolatecal:
+    - text: "🍫 <i>Dark Chocolate</i> (~100g): ~500-600 kcal<br>
+             <b>70% Cocoa:</b> ~550 kcal<br>
+             <b>85% Cocoa:</b> ~600 kcal (Richer but higher in fats!)"
+  
+  utter_milkcal:
+    - text: "🥛 <i>Milk (per 250ml)</i><br>
+             <b>Whole Milk:</b> ~150 kcal<br>
+             <b>Skimmed Milk:</b> ~80-100 kcal<br>
+             🌱 <b>Almond Milk:</b> ~30-50 kcal (low-calorie alternative!)"
+  
+  utter_oatscal:
+    - text: "🥣 <i>Oats (100g, dry)</i>: ~350-400 kcal<br>
+            (Rich in fiber, great for digestion & weight management!)"
+  
+  utter_dryfruitscal:
+    - text: "🥜 <i>Dry Fruits (per 100g)</i>:<br>
+             🌰 <b>Almonds:</b> ~600 kcal<br>
+             🥜 <b>Cashews:</b> ~550 kcal<br>
+             🌰 <b>Walnuts:</b> ~650 kcal<br>
+             🍇 <b>Raisins:</b> ~300 kcal (high in natural sugars!)"
+
+  utter_tofu:
+    - text: "🍲 <b>Tofu</b> (per 100g) contains ~144 kcal.<br>
+           A great plant-based protein source, rich in iron and calcium!"  
+    - text: "🍲 <b>Tofu Varieties & Calories</b><br>
+           🔸 Firm Tofu (~144 kcal per 100g)<br>
+           🔸 Silken Tofu (~90 kcal per 100g)<br>
+           🔸 Fried Tofu (~270 kcal per 100g)<br>
+           High in protein & a great meat alternative! 💪"  
+    - text: "100g of <i>tofu</i> provides:<br>
+           ✅ Protein: ~15g<br>✅ Fats: ~9g<br>✅ Carbs: ~3g<br>
+           🦴 Good source of calcium & supports bone health!"  
+
+  utter_peanuts:
+    - text: "🥜 <b>Peanuts</b> (per 100g) contain ~567 kcal.<br>
+           High in protein & healthy fats, but also calorie-dense—snack wisely!"  
+    - text: "🥜 <b>Peanuts & Peanut Butter Calories</b><br>
+           ✅ Raw Peanuts (~567 kcal per 100g)<br>
+           ✅ Roasted Peanuts (~580 kcal per 100g)<br>
+           ✅ Peanut Butter (~588 kcal per 100g)<br>
+           Great for energy & muscle recovery! 💪"             
+  utter_chole:
+    - text: "🍛 <b>Chole (Chickpea Curry)</b> (~250-300 kcal per serving).<br>
+           Packed with protein, fiber, and delicious Indian spices!"  
+    - text: "🍛 A bowl of <i>Chole</i> (~300 kcal) provides:<br>
+           ✅ Protein: ~15g<br>✅ Fiber: ~10g<br>✅ Carbs: ~40g<br>
+           A powerhouse for vegetarians! 🌱"  
+  
+  utter_biryani:
+    - text: "🍛 <b>Biryani Calories (Per Serving)</b><br>
+           🍚 Veg Biryani: ~300-400 kcal<br>
+           🍗 Chicken Biryani: ~400-500 kcal<br>
+           🐐 Mutton Biryani: ~500-600 kcal<br>
+           A flavorful dish, but watch portion sizes!"  
+    - text: "🍛 A plate of <i>Biryani</i> provides a mix of carbs, protein, fats and calories upto <b>500kcal</b>.<br>
+           A fulfilling but high-calorie meal! ⚖️"  
+
+  utter_mango:
+    - text: "🥭 <b>Mango</b> (~60 kcal per 100g).<br>
+           Naturally sweet & loaded with vitamins!"  
+    - text: "🥭 One medium <i>mango</i> (~200g) has ~120 kcal.<br>
+           High in Vitamin C, A & antioxidants!"  
+
+  utter_spinach:
+    - text: "🥬 <b>Spinach</b> (~23 kcal per 100g).<br>
+           Low in calories but packed with nutrients!"  
+    - text: "🥬 100g of <i>Spinach</i> provides:<br>
+           ✅ Protein: ~2.9g<br>✅ Fiber: ~2.2g<br>✅ Iron: ~2.7mg<br>
+           A superfood for overall health!"  
+
+  utter_coffee:
+    - text: "☕ <b>Coffee Calories</b><br>
+           ✅ Black Coffee: ~2 kcal per cup<br>
+           ✅ Cappuccino: ~120 kcal per cup<br>
+           ✅ Latte: ~150 kcal per cup<br>
+           ✅ Mocha: ~250 kcal per cup<br>
+           Calories vary based on milk & sugar added!"  
+
+  utter_tea:
+    - text: "🍵 <b>Tea Calories</b><br>
+           ✅ Green Tea: ~2 kcal per cup<br>
+           ✅ Black Tea: ~2 kcal per cup<br>
+           ✅ Masala Chai: ~120 kcal per cup (with milk & sugar)<br>
+           ✅ Bubble Tea: ~250-400 kcal per cup!<br>
+           Herbal teas are a great low-calorie option! 🍃"  
+
+  utter_misseditems:
+    - text: "Looks like you are asking about a food item or some other concept, which I am not trained with, Sorry 🙏🏻"    
+
+  utter_homework:
+    - text: "🏠 <b>Home Workouts</b> – No Gym? No Problem! 💪<br>
+           These exercises target overall fitness, strength, and endurance:<br><br>
+           🔹 <i>Push-ups</i> – Chest, shoulders, triceps, core<br>
+           🔹 <i>Squats</i> – Legs, glutes, core stability<br>
+           🔹 <i>Planks</i> – Core endurance & posture<br>
+           🔹 <i>Burpees</i> – Full-body fat burn & cardio<br>
+           🔹 <i>Jump Rope</i> – Cardio, calves & coordination<br><br>
+           Home workouts are great for consistency & building foundational strength! 🏋️‍♂️
+           🏠 <b>Benefits of Home Workouts</b> 🏋️‍♂️<br>
+           ✅ Improves cardiovascular health<br>
+           ✅ Builds strength using body weight<br>
+           ✅ No equipment needed, cost-effective<br>
+           ✅ Great for weight loss & endurance<br>
+           Stay fit without stepping out! 🚀" 
+
+  utter_gymwork:
+    - text: "🏋️‍♂️ <b>Gym Workouts</b> – Unlock Your Strength & Fitness! 💥<br>
+            Whether you're a beginner or a pro, these essential exercises promote overall body fitness:<br><br>
+           🔹 <i>Deadlifts</i> – Full-body strength & core stability<br>
+           🔹 <i>Bench Press</i> – Chest, shoulders, triceps<br>
+           🔹 <i>Squats</i> – Leg power & functional strength<br>
+           🔹 <i>Pull-Ups</i> – Back, arms, and grip strength<br>
+           🔹 <i>Rowing Machine</i> – Cardio, endurance & back strength<br><br>
+           Gym training helps with muscle gain, fat loss, and endurance! 🚀 <br>
+           🏋️‍♂️ <b>Why Gym Workouts Matter?</b><br>
+           ✅ Builds lean muscle & boosts metabolism<br>
+           ✅ Helps with fat loss & body sculpting<br>
+           ✅ Strengthens bones & improves posture<br>
+           ✅ Customizable workouts for specific goals<br>
+           Time to hit the gym and level up! 🔥" 
+
+  utter_yoga:
+    - text: "🧘‍♂️<b>Yoga for Mind & Body</b> 🌿<br>
+            Yoga is not just about flexibility—it's about balance, strength, and mental well-being!<br><br>
+           🔹 <i>Surya Namaskar</i> – Full-body activation & flexibility<br>
+           🔹 <i>Downward Dog</i> – Strengthens arms, shoulders & spine<br>
+           🔹 <i>Tree Pose</i> – Improves balance & stability<br>
+           🔹 <i>Child’s Pose</i> – Stress relief & back relaxation<br>
+           🔹 <i>Pranayama</i> – Breath control for better oxygen flow & calmness<br><br>
+           Daily yoga promotes longevity, mental clarity & strength! 🧘<br>
+           🧘‍♂️ <b>Yoga Benefits for a Healthier You</b> 🌿<br>
+           ✅ Improves flexibility & mobility<br>
+           ✅ Reduces stress & anxiety<br>
+           ✅ Enhances lung function & heart health<br>
+           ✅ Strengthens muscles without weights<br>
+           A peaceful mind & strong body—Yoga brings it all! ✨" 
+
+  utter_healthtips:
+    - text: "💡 <b>Health Tip:</b> Drinking <i>water before meals</i> can help with digestion and may reduce calorie intake by up to 13%! Stay hydrated! 💦<br>(Want to hear more, type 'facts' again🙏🏻)"  
+    - text: "💡 <b>Did You Know?</b> Spicy foods like chili peppers can temporarily boost your metabolism by 8-10%, aiding in fat burn! 🌶️🔥<br>(Want to hear more, type 'facts' again🙏🏻)"  
+    - text: "💡 <b>Surprising Health Fact:</b> Eating a handful of nuts daily can lower the risk of heart disease by up to 30%!🥜❤️<br>(Type 'facts' again to hear more)"  
+    - text: "💡 <b>Rare Fact:</b> The human body burns about 50 calories per hour while sleeping! Deep sleep is essential for metabolism & weight control. 💤<br>(Type 'facts' again to hear more!)"  
+    - text: "💡 <b>Interesting Nutrition Fact:</b> Dark chocolate (70%+ cocoa) not only boosts mood but also improves blood flow and cognitive function! 🍫🧠<br>(Type 'facts' again to hear more!)"  
+    - text: "💡 <b>Health Hack:</b> Walking for just 10 minutes after meals can significantly lower blood sugar levels! Try a post-meal stroll. 🚶‍♂️<br>(Type 'facts' again to hear more)"  
+    - text: "💡 <b>Fitness Fact:</b> Strength training helps burn calories even AFTER your workout, thanks to the ‘afterburn effect’! <br>(Want to hear more, type 'facts' again🙏🏻) 💪🔥"                               
+  
+  utter_thirtydays:
+    - text: "<b>30-Day Fitness Challenge 💪</b><br>
+           Commit to a structured plan to build discipline, stamina, and strength!<br>
+           🔥 Try this simple routine:<br>
+           1️⃣ <i>Push-ups</i> – Start with 10 reps, increase daily!<br>
+           2️⃣ <i>Squats</i> – 15 reps daily for leg & core strength!<br>
+           3️⃣ <i>Plank</i> – Hold for 20 seconds, build up time weekly!<br>
+           🌟 By the end of 30 days, you'll feel stronger and more energetic!"
+
+  utter_walk:
+    - text: "<b>Walking: The Underrated Power Move 🚶‍♂️</b><br>
+           ✅ Supports heart health & fat loss.<br>
+           ✅ 8,000-10,000 steps/day boosts longevity.<br>
+           🔥 Walking <i>backward</i> activates different muscles & burns more calories!"
+
+  utter_sleep:
+    - text: "<b>Sleep: Your Body’s Natural Reset Button 💤</b><br>
+           ✅ Helps muscle recovery & weight management.<br>
+           ✅ Poor sleep increases hunger & slows metabolism.<br>
+           🔑 Stick to a sleep schedule & avoid screens before bed!"
+
+  utter_weightgainstrategies:
+    - text: "<b>Smart Weight Gain Strategies 🍛</b><br>
+           ✅ Eat frequent, high-calorie, nutrient-dense meals.<br>
+           ✅ Strength train to turn calories into muscle, not fat.<br>
+           ✅ Drink calorie-rich smoothies & protein shakes for extra intake!"
+
+  utter_weightlossstrategies:
+    - text: "<b>Effective Weight Loss Tips 🔥</b><br>
+           ✅ Prioritize whole foods – veggies, lean protein, whole grains.<br>
+           ✅ Mix cardio & strength training for long-term fat loss.<br>
+           ✅ Manage stress & get proper sleep to control cravings!"
+
+  utter_hydrate:
+    - text: "<b>Hydration: Your Secret Weapon 💦</b><br>
+           ✅ Water boosts metabolism & skin health.<br>
+           ✅ Best drinks: Water, coconut water, herbal teas.<br>
+           🚫 Worst choices: Sugary sodas & excessive caffeine!"
+
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true
+

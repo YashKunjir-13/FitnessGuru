@@ -1,0 +1,118 @@
+<!-- index.html (Meal Tracking Form) -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meal Tracking</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            max-width: 600px;
+            background: url('bmr.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: white;
+        }
+        h2, h3 { text-align: center; }
+        .meal-form {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            color: black;
+        }
+        button {
+            background-color: #ba4618;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            display: block;
+            width: 100%;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #ff4d00;
+        }
+        .meal-summary {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            text-align: center;
+            color: black;
+        }
+    </style>
+</head>
+<body>
+    <h2>Meal Tracking</h2>
+    <div class="meal-form">
+        <h1>TRACK YOUR MEALS</h1>
+        <form id="mealTrackingForm">
+            <h4>Breakfast</h4>
+            <label><input type="radio" name="breakfast" value="followed"> Meal Followed</label>
+            <label><input type="radio" name="breakfast" value="unfollowed"> Meal Unfollowed</label>
+            <label><input type="radio" name="breakfast" value="missed"> Meal Missed</label>
+            
+            <h4>Lunch</h4>
+            <label><input type="radio" name="lunch" value="followed"> Meal Followed</label>
+            <label><input type="radio" name="lunch" value="unfollowed"> Meal Unfollowed</label>
+            <label><input type="radio" name="lunch" value="missed"> Meal Missed</label>
+            
+            <h4>Dinner</h4>
+            <label><input type="radio" name="dinner" value="followed"> Meal Followed</label>
+            <label><input type="radio" name="dinner" value="unfollowed"> Meal Unfollowed</label>
+            <label><input type="radio" name="dinner" value="missed"> Meal Missed</label>
+            
+            <button type="button" onclick="trackMeals()">Submit</button>
+        </form>
+    </div>
+    
+    <div class="meal-summary" id="mealSummary" style="display:none;">
+        <h3>Meal Tracking Summary</h3>
+        <h3 id="resultText"></h3>
+        <p id="quoteText"></p>
+    </div>
+    
+    <script>
+        function trackMeals() {
+            let followedCount = 0, missedCount = 0, unfollowedCount = 0;
+            
+            const meals = ["breakfast", "lunch", "dinner"];
+            
+            meals.forEach(meal => {
+                const selected = document.querySelector(`input[name='${meal}']:checked`);
+                if (selected) {
+                    if (selected.value === "followed") followedCount++;
+                    if (selected.value === "missed") missedCount++;
+                    if (selected.value === "unfollowed") unfollowedCount++;
+                }
+            });
+            
+            let result = "";
+            if (followedCount === 3) {
+                result = "🎯 Target Achieved! Keep up the good work!";
+            } else if (missedCount > 0 && followedCount > 0) {
+                result = "⚠️ Target Partially Achieved! Stay Consistent!";
+            } else {
+                result = "❌ Target Not Achieved! Try Again Tomorrow!";
+            }
+            
+            let quotes = [
+                "The only bad workout is the one that didn’t happen.",
+                "You don’t have to be extreme, just consistent.",
+                "Every meal is a new opportunity to get better.",
+                "Healthy eating is a way of life, so it’s important to establish routines that are simple, realistic, and ultimately livable.",
+                "Strive for progress, not perfection."
+            ];
+            let randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+            
+            document.getElementById("resultText").innerHTML = result;
+            document.getElementById("quoteText").innerHTML = `💪 "${randomQuote}"`;
+            document.getElementById("mealSummary").style.display = "block";
+        }
+    </script>
+</body>
+</html>

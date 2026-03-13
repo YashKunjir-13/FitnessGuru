@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sign In - PT</title>
+    <style>
+        body {
+            background-image: url(back.jpg);
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            margin: 0;
+            padding: 0;
+            font-size: 24px;
+            font-family: "Falling Sky";
+        }
+
+        h1 {
+            font-family: Arial;
+            text-indent: 50%; 
+            font-size: xx-large;
+            font-weight: bolder;
+        }
+
+        div { 
+            background-color: transparent;
+            width: 500px;
+            color: black;
+            padding: 50px;
+            margin: 50px;
+            border-radius: 20px;
+            text-indent: 10px;
+            font-size: large;
+            font-weight: bold; 
+        }
+
+        div img {
+            width: 20%;
+            height: 20%;
+        }
+
+        div input {
+            border-width: 4px;
+            border-color: darkblue;
+            padding: 5px;
+            border-radius: 20px;
+        }
+
+        .button1 {
+            background-color: whitesmoke;
+            border-color: black;
+            border-width: thick;
+            border-radius: 20px;
+            padding: 16px 32px;
+            text-align: center;
+            font-size: medium;
+            display: inline-block;
+            margin: 4px 2px;
+            transition-duration: 0.4s;
+            cursor: pointer;
+            font-family: "Times New Roman";
+            font-size: 20px;
+        }
+
+        .button1:hover {
+            background-color: blue;
+            color: white;
+        }
+
+        .logo img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.7);
+        }
+
+        a {
+            color: rgb(13, 185, 242);
+            text-decoration: none;
+        }
+    </style>    
+</head>
+<body>
+    <center>
+        <div>
+            <img src="newlogo.png" alt="Logo">
+            <h2 style="color: black; font-size: 38px;"><b>SIGN IN</b></h2>
+            
+            <form id="signinForm">
+                <h2>Please Enter Your Details Again!</h2><br>
+                <label for="username">Username:</label>
+                <input type="text" name="username" required><br><br>
+
+                <label for="password">Password:</label>
+                <input type="password" name="password" required><br><br><br>
+
+                <button type="submit" class="button1">Sign In</button>
+                <br><br>
+
+                <p>Don't have an account? <a href="register.html"><b>Register Now</b></a></p>
+            </form>
+        </div>
+    </center>
+
+    <script>
+        document.querySelector("#signinForm").addEventListener("submit", function(event) {
+            event.preventDefault(); // Prevent normal form submission
+
+            const formData = {
+                username: document.querySelector("input[name='username']").value,
+                password: document.querySelector("input[name='password']").value
+            };
+
+            fetch("/signin", { 
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                if (data.message === "Login successful!") {
+                    window.location.href = "main.html"; // Redirect to main.html
+                }
+            })
+            .catch(error => console.error("Error:", error));
+        });
+    </script>        
+
+</body>
+</html>
